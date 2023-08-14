@@ -28,7 +28,7 @@ public class MessageService : IMessageService
             if (newTags.Any()) transaction = await tagRepository.CreateAsync(newTags);
             await messageRepository.CreateAsync(message, transaction);
 
-            if (transaction is null) throw new InvalidOperationException("Operation was failed during saving a message");
+            if (transaction is null) throw new InvalidOperationException("Operation was failed during saving a message/tags");
             await transaction.CommitAsync();
         }
         catch (Exception)
