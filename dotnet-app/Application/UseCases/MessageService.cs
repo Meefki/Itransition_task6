@@ -1,5 +1,4 @@
-﻿using Application.Network;
-using Application.Repositories;
+﻿using Application.Repositories;
 using Domain;
 
 namespace Application.UseCases;
@@ -17,7 +16,7 @@ public class MessageService : IMessageService
         this.messageRepository = messageRepository;
     }
 
-    public async Task<IEnumerable<Tag>> WriteMessageAsync(Message message)
+    public async Task<IEnumerable<Tag>> WriteAsync(Message message)
     {
         ITransaction? transaction = null;
         IEnumerable<Tag> newTags = new List<Tag>();
