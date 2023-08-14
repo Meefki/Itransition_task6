@@ -1,10 +1,12 @@
 using API.Models;
 using Application.Repositories;
 using Domain;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [EnableCors("Default")]
     [ApiController]
     [Route("api/[controller]")]
     public class MessageController : ControllerBase

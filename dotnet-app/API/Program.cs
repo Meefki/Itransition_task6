@@ -27,6 +27,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Default",
+        b =>
+        {
+            b.WithOrigins(config.GetValue<string>("Cors::AllowedHosts") ?? string.Empty);
+            b.AllowAnyMethod();
+            b.AllowAnyOrigin();
+        });
+});
 
 builder.Services.AddSignalR();
 builder.Services.AddCustomServices();
@@ -57,6 +67,7 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseCors("Default");
 
 app.MapControllers();
 app.MapHub<MessageHub>("/messageHub");

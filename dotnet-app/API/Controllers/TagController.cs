@@ -1,9 +1,11 @@
 ﻿using Application.Repositories;
 using Domain;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [EnableCors("Default")]
     [Route("api/[controller]")]
     [ApiController]
     public class TagController : ControllerBase
