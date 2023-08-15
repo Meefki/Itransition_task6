@@ -1,12 +1,13 @@
-﻿using Domain;
+﻿using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EntityConfigurations;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<Message> Messages { get; set; }
-    public DbSet<Tag> Tags { get; set; }
+    public DbSet<MessageDTO> Messages { get; set; }
+    public DbSet<MessageTagDTO> MessageTags { get; set; }
+    public DbSet<TagDTO> Tags { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options) { }
@@ -15,5 +16,6 @@ public class AppDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new TagEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new MessageEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new MessageTagEntityTypeConfiguration());
     }
 }

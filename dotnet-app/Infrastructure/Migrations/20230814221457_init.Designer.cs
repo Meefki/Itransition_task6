@@ -4,6 +4,7 @@ using Infrastructure.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230814221457_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Infrastructure.Models.MessageDTO", b =>
+            modelBuilder.Entity("Domain.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,22 +45,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("messages", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.MessageTagDTO", b =>
-                {
-                    b.Property<int>("MessageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MessageId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("MessageTags", (string)null);
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.TagDTO", b =>
+            modelBuilder.Entity("Domain.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,33 +65,34 @@ namespace Infrastructure.Migrations
                     b.ToTable("tags", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.MessageTagDTO", b =>
+            modelBuilder.Entity("MessageTag", b =>
                 {
-                    b.HasOne("Infrastructure.Models.MessageDTO", "Message")
-                        .WithMany("MessageTags")
-                        .HasForeignKey("MessageId")
+                    b.Property<int>("MessagesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MessagesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("MessageTag");
+                });
+
+            modelBuilder.Entity("MessageTag", b =>
+                {
+                    b.HasOne("Domain.Message", null)
+                        .WithMany()
+                        .HasForeignKey("MessagesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Models.TagDTO", "Tag")
-                        .WithMany("MessageTags")
-                        .HasForeignKey("TagId")
+                    b.HasOne("Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Message");
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.MessageDTO", b =>
-                {
-                    b.Navigation("MessageTags");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.TagDTO", b =>
-                {
-                    b.Navigation("MessageTags");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230814031557_init")]
-    partial class init
+    [Migration("20230815074655_init3")]
+    partial class init3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,13 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Message", b =>
+            modelBuilder.Entity("Infrastructure.Models.MessageDTO", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 0L);
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
@@ -45,19 +45,34 @@ namespace Infrastructure.Migrations
                     b.ToTable("messages", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Tag", b =>
+            modelBuilder.Entity("Infrastructure.Models.MessageTagDTO", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("MessageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MessageId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("MessageTags");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.TagDTO", b =>
+                {
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 0L);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -65,34 +80,23 @@ namespace Infrastructure.Migrations
                     b.ToTable("tags", (string)null);
                 });
 
-            modelBuilder.Entity("MessageTag", b =>
+            modelBuilder.Entity("Infrastructure.Models.MessageTagDTO", b =>
                 {
-                    b.Property<int>("MessagesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Tagsid")
-                        .HasColumnType("int");
-
-                    b.HasKey("MessagesId", "Tagsid");
-
-                    b.HasIndex("Tagsid");
-
-                    b.ToTable("MessageTag");
-                });
-
-            modelBuilder.Entity("MessageTag", b =>
-                {
-                    b.HasOne("Domain.Message", null)
+                    b.HasOne("Infrastructure.Models.MessageDTO", "Message")
                         .WithMany()
-                        .HasForeignKey("MessagesId")
+                        .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Tag", null)
+                    b.HasOne("Infrastructure.Models.TagDTO", "Tag")
                         .WithMany()
-                        .HasForeignKey("Tagsid")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Message");
+
+                    b.Navigation("Tag");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,17 +23,17 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMessages(int pageSize, int page, IEnumerable<string> tags)
+        public async Task<IActionResult> GetMessages([FromQuery] IEnumerable<string> tags)
         {
             try
             {
-                IEnumerable<Message> messages = await messageRepository.GetAsync(pageSize, page, tags.Select(x => new Tag(x)));
+                IEnumerable<Message> messages = await messageRepository.GetAsync(tags);
                 return Ok(messages.Select(
                     x => new MessageDTO()
                     {
                         Message = x.Value,
                         SentDate = x.SentDate,
-                        Tags = x.Tags.Select(t => t.Name)
+                        Tags = x.Tags.Any() ? x.Tags.Select(t => t.Name) : new List<string>()
                     }));
             }
             catch (Exception ex)
