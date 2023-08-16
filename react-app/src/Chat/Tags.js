@@ -4,15 +4,14 @@ import TagInput from "../UIComponents/TagInput";
 
 const styles = {
     a: {
-        cursor: 'default'
+        cursor: 'default',
+        userSelect: 'none'
     }
 }
 
 function Tags({ tags, selectedTags, setSelectedTags, inputPlaceholder }) {
 
-    //const [selectedTags, setSelectedTags] = useState([])
-
-    function addTag({key}) {
+    function addTag(key) {
         if (!selectedTags.find(tagKey => tagKey === key))
         {
             let selTags = [...selectedTags];
@@ -27,12 +26,16 @@ function Tags({ tags, selectedTags, setSelectedTags, inputPlaceholder }) {
         setSelectedTags(selTags);
     }
 
+    function selectTags() {
+        return tags.filter(t => !selectedTags.includes(t));
+    }
+
     return (
         <div className="hafl-height-container border-end shadow">
             <div className="bg-light border-bottom shadow-sm mb-3"  style={{ minHeight: 51 }}>
                 <div className="container-fluid">
                     <div className="d-sm-inline-flex">
-                        <TagInput tags={tags.filter(t => !selectedTags.includes(t))} addTag={addTag} inputPlaceholder={inputPlaceholder}/>
+                        <TagInput tags={selectTags()} addTag={addTag} inputPlaceholder={inputPlaceholder}/>
                     </div>
                 </div>
             </div>
@@ -48,8 +51,7 @@ function Tags({ tags, selectedTags, setSelectedTags, inputPlaceholder }) {
                             <Tag className="m-1" color="#55acee">
                                 {tag}
                             </Tag>
-                    </a>
-                    )
+                    </a>)
                 }
             </div>
         </div>

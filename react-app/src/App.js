@@ -57,13 +57,13 @@ function App() {
 
   return (
     <div className="d-flex">
-      <div className="full-height-container col-md-4">
+      <div className="full-height-container col-md-2">
       <TagsContext.Provider value={{ getTags }}>
         <Tags tags={tags} selectedTags={selectedFilterTags} setSelectedTags={setSelectedFilterTags} inputPlaceholder="Search filter tag..."/>
         <Tags tags={tags} selectedTags={selectedMessageTags} setSelectedTags={setSelectedMessageTags} inputPlaceholder="Search message tag..."/>
       </TagsContext.Provider>
       </div>
-      <div className="col-md-8">
+      <div className="col-md-10">
         <Chat filterTags={selectedFilterTags} messageTags={selectedMessageTags}/>
       </div>
     </div>
