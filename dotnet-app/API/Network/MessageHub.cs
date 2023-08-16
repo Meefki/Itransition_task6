@@ -18,7 +18,7 @@ public class MessageHub : Hub<IClient>, IEventService
     {
         IEnumerable<Tag> newTags = await messageService.WriteAsync(message);
 
-        await Clients.Others.NewTags(newTags);
-        await Clients.Others.NewMessage(message);
+        await Clients.All.NewTags(newTags);
+        await Clients.All.NewMessage(message);
     }
 }

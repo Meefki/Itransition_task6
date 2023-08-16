@@ -32,9 +32,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "Default",
         b =>
         {
-            b.WithOrigins(config.GetValue<string>("Cors::AllowedHosts") ?? string.Empty);
+            b.WithOrigins(config.GetValue<string>("Cors:AllowedHosts") ?? string.Empty);
             b.AllowAnyMethod();
-            b.AllowAnyOrigin();
+            b.AllowAnyHeader();
+            b.AllowCredentials();
         });
 });
 

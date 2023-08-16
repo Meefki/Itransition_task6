@@ -22,11 +22,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTags(string startWith)
+        [Route("")]
+        public async Task<IActionResult> GetTags(string? startWith = "")
         {
             try
             {
-                IEnumerable<Tag> mathedTags = await tagRepository.GetAsync(startWith);
+                IEnumerable<Tag> mathedTags = await tagRepository.GetAsync(startWith!);
                 return Ok(mathedTags.Select(x => x.Name));
             }
             catch (Exception ex)

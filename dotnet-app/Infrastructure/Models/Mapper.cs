@@ -23,19 +23,22 @@ internal static class Mapper
     public static Message MapDtoToEntity(MessageDTO dto)
     {
         return new(
-            dto.Id,
             dto.Value,
             dto.MessageTags.Select(x => MapDtoToEntity(x.Tag)).ToHashSet(),
-            dto.SentDate);
+            dto.SentDate,
+            dto.Id);
     }
 
     public static MessageDTO MapEntityToDto(Message entity)
     {
-        return new()
+        MessageDTO dto = new()
         {
-            Id = entity.Id,
             Value = entity.Value,
             SentDate = entity.SentDate,
         };
+        if (entity.Id.HasValue)
+            dto.Id = entity.Id.Value;
+
+        return dto;
     }
 }
