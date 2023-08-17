@@ -26,11 +26,13 @@ function App() {
 
   useEffect(() => {
     if (newMessage){
-      let msgs = [...messages, newMessage];
-      msgs.sort((m1, m2) =>  m1.sentDate > m2.sentDate ? 1 : m1.sentDate < m2.sentDate ? -1 : 0);
-      if (selectedFilterTags && selectedFilterTags.some(el => {
-        return !messages.tags || messages.tags.lenght == 0 || messages.tags.ifndexOf(el) !== -1;
-      }))
+      let msgs = [...messages];
+      if (!selectedFilterTags || selectedFilterTags.some(el => {
+        return !newMessage.tags || newMessage.tags.lenght == 0 || newMessage.tags.indexOf(el) !== -1;
+      })) {
+        msgs.push(newMessage);
+        msgs.sort((m1, m2) =>  m1.sentDate > m2.sentDate ? 1 : m1.sentDate < m2.sentDate ? -1 : 0);
+      }
       setMessages(msgs);
     }
   }, [newMessage])
