@@ -12,8 +12,9 @@ public class MessageEntityTypeConfiguration : IEntityTypeConfiguration<MessageDT
             .ToTable("messages");
 
         builder.Property(x => x.Id)
-            .HasColumnType("int")
-            .UseIdentityColumn(0, 1);
+            .HasConversion(
+                id => id.ToString(),
+                value => Guid.Parse(value));
         builder.HasKey(x => x.Id);
 
         builder

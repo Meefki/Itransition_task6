@@ -14,11 +14,14 @@ public class MessageHub : Hub<IClient>, IEventService
         this.messageService = messageService;
     }
 
-    public async Task Send(Message message)
+    public async Task Send(MessageNotification message)
     {
-        IEnumerable<Tag> newTags = await messageService.WriteAsync(message);
+        HashSet<Tag> tags = message.Tags.Select(x => new Tag(x)).ToHashSet();
+        Message msg = new(message.Value, tags);
 
-        await Clients.All.NewTags(newTags);
+        IEnumerable<Tag> newTags = await messageService.WriteAsync(msg);
+
+        await Clients.All.NewTags(newTags.Select(x => x.Name).ToList());
         await Clients.All.NewMessage(message);
     }
 }

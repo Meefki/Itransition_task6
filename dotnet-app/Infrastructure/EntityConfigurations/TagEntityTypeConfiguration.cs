@@ -12,7 +12,9 @@ public class TagEntityTypeConfiguration : IEntityTypeConfiguration<TagDTO>
             .ToTable("tags");
 
         builder.Property(x => x.Id)
-            .UseIdentityColumn(0, 1);
+            .HasConversion(
+                id => id.ToString(), 
+                value => Guid.Parse(value));
         builder.HasKey(x => x.Id);
 
         builder

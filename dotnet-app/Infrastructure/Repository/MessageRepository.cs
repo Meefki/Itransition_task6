@@ -53,5 +53,31 @@ public class MessageRepository : IMessageRepository
                 .ToList());
     }
 
+    public async Task<ITransaction> LinkTagsAsync(Message message, IEnumerable<Tag> tags, ITransaction? transaction = null)
+    {
+        if (transaction is null)
+        {
+            var dbTransaction = (await context.Database.BeginTransactionAsync()).GetDbTransaction();
+            transaction = new Transaction(dbTransaction);
+        }
+        else
+        {
+            await context.Database.UseTransactionAsync((DbTransaction)transaction.Value);
+        }
 
+        MessageDTO msgDTO = Mapper.MapEntityToDto(message);
+        IEnumerable<TagDTO> tagDTOs = tags.Select(x => Mapper.MapEntityToDto(x));
+
+        IEnumerable<MessageTagDTO> messageTagDTO = tagDTOs.Select(
+            x => new MessageTagDTO()
+            {
+                MessageId = msgDTO.Id,
+                TagId = x.Id
+            }).ToList();
+
+        await context.MessageTags.AddRangeAsync(messageTagDTO);
+        await context.SaveChangesAsync();
+
+        return transaction;
+    }
 }

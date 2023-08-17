@@ -1,9 +1,10 @@
-﻿using Domain;
+﻿using Application.Network;
+using Domain;
 
 namespace API.Network;
 
 public interface IClient
 {
-    Task NewMessage(Message message);
-    Task NewTags(IEnumerable<Tag> tags);
+    Task NewMessage(MessageNotification message);
+    Task NewTags(IEnumerable<string> tags);
 }

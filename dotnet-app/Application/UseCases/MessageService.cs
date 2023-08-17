@@ -20,13 +20,20 @@ public class MessageService : IMessageService
     {
         ITransaction? transaction = null;
         IEnumerable<Tag> newTags = new List<Tag>();
+        IEnumerable<Tag> existingTags = new List<Tag>();
 
         try
         {
-            newTags = await tagRepository.CheckExistingAsync(message.Tags);
+            (newTags, existingTags) = await tagRepository.CheckExistingAsync(message.Tags);
             if (newTags.Any()) 
                 transaction = await tagRepository.CreateAsync(newTags);
-            await messageRepository.CreateAsync(message, transaction);
+            transaction = await messageRepository.CreateAsync(message, transaction);
+            if (message.Tags.Count > 0)
+            {
+                var tags = new List<Tag>(newTags);
+                tags.AddRange(existingTags);
+                transaction = await messageRepository.LinkTagsAsync(message, tags, transaction);
+            }
 
             if (transaction is null) throw new InvalidOperationException("Operation was failed during saving a message/tags");
             await transaction.CommitAsync();

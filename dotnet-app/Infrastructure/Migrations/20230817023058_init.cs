@@ -15,8 +15,7 @@ namespace Infrastructure.Migrations
                 name: "messages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "0, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -29,8 +28,7 @@ namespace Infrastructure.Migrations
                 name: "tags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "0, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -39,33 +37,33 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MessageTag",
+                name: "MessageTags",
                 columns: table => new
                 {
-                    MessagesId = table.Column<int>(type: "int", nullable: false),
-                    TagsId = table.Column<int>(type: "int", nullable: false)
+                    MessageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TagId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MessageTag", x => new { x.MessagesId, x.TagsId });
+                    table.PrimaryKey("PK_MessageTags", x => new { x.MessageId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_MessageTag_messages_MessagesId",
-                        column: x => x.MessagesId,
+                        name: "FK_MessageTags_messages_MessageId",
+                        column: x => x.MessageId,
                         principalTable: "messages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MessageTag_tags_TagsId",
-                        column: x => x.TagsId,
+                        name: "FK_MessageTags_tags_TagId",
+                        column: x => x.TagId,
                         principalTable: "tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageTag_TagsId",
-                table: "MessageTag",
-                column: "TagsId");
+                name: "IX_MessageTags_TagId",
+                table: "MessageTags",
+                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_tags_Name",
@@ -78,7 +76,7 @@ namespace Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MessageTag");
+                name: "MessageTags");
 
             migrationBuilder.DropTable(
                 name: "messages");

@@ -24,11 +24,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.MessageDTO", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 0L);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
@@ -44,11 +42,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.MessageTagDTO", b =>
                 {
-                    b.Property<int>("MessageId")
-                        .HasColumnType("int");
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
+                    b.Property<string>("TagId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageId", "TagId");
 
@@ -59,11 +57,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.TagDTO", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 0L);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()

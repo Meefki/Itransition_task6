@@ -1,8 +1,6 @@
-﻿using Domain;
-
-namespace Application.Network;
+﻿namespace Application.Network;
 
 public interface IEventService
 {
-    Task Send(Message message);
+    Task Send(MessageNotification message);
 }

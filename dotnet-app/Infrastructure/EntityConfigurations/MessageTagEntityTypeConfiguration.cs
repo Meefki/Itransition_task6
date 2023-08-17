@@ -11,6 +11,15 @@ public class MessageTagEntityTypeConfiguration : IEntityTypeConfiguration<Messag
         builder.ToTable("MessageTags");
 
         builder.HasKey(x => new { x.MessageId, x.TagId });
+        builder.Property(x => x.MessageId)
+            .HasConversion(
+                id => id.ToString(),
+                value => Guid.Parse(value));
+
+        builder.Property(x => x.TagId)
+            .HasConversion(
+                id => id.ToString(),
+                value => Guid.Parse(value));
 
         builder
             .HasOne(x => x.Message)

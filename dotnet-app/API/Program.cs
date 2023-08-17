@@ -18,10 +18,7 @@ builder.Logging.AddSerilog(Log.Logger);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(config.GetConnectionString("Default"), options =>
-    {
-        options.EnableRetryOnFailure(3);
-    });
+    options.UseSqlServer(config.GetConnectionString("Default"));
 });
 
 builder.Services.AddControllers();

@@ -17,11 +17,15 @@ public class TagRepository : ITagRepository
         this.context = context;
     }
 
-    public async Task<IEnumerable<Tag>> CheckExistingAsync(IEnumerable<Tag> tags)
+    public async Task<Tuple<IEnumerable<Tag>, IEnumerable<Tag>>> CheckExistingAsync(IEnumerable<Tag> tags)
     {
         List<string> names = tags.Select(t => t.Name).ToList();
         return await Task.Run(
-            () =>context.Tags.Where(x => names.Contains(x.Name)).Select(x => Mapper.MapDtoToEntity(x)).ToList());
+            () => {
+                var tagDTOs = context.Tags.Where(x => names.Contains(x.Name)).Select(x => Mapper.MapDtoToEntity(x)).ToList();
+                var newTags = names.Where(x => !tagDTOs.Select(t => t.Name).Contains(x)).Select(x => new Tag(x)).ToList();
+                return new Tuple<IEnumerable<Tag>, IEnumerable<Tag>>(newTags, tagDTOs);
+            });
     }
 
     public async Task<ITransaction> CreateAsync(IEnumerable<Tag> tags, ITransaction? transaction = null)
