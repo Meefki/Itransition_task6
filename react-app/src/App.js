@@ -51,20 +51,20 @@ function App() {
     }
   }, [connection])
 
-  // const sendMessage = async (message) => {
-  //     if (connection) await connection.send("Send", message);
-  // }
+  const sendMessage = async (message) => {
+      if (connection) await connection.send("Send", message);
+  }
 
   return (
-    <div className="d-flex">
-      <div className="full-height-container col-md-2">
+    <div className="d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
+      <div className="full-height-container col-12 col-lg-4 col-md-6 col-sm-12 d-flex flex-column">
       <TagsContext.Provider value={{ getTags }}>
-        <Tags tags={tags} selectedTags={selectedFilterTags} setSelectedTags={setSelectedFilterTags} inputPlaceholder="Search filter tag..."/>
-        <Tags tags={tags} selectedTags={selectedMessageTags} setSelectedTags={setSelectedMessageTags} inputPlaceholder="Search message tag..."/>
+        <Tags tags={tags} selectedTags={selectedFilterTags} setSelectedTags={setSelectedFilterTags} inputPlaceholder="Filter tags"/>
+        <Tags tags={tags} selectedTags={selectedMessageTags} setSelectedTags={setSelectedMessageTags} inputPlaceholder="Message tags"/>
       </TagsContext.Provider>
       </div>
-      <div className="col-md-10">
-        <Chat filterTags={selectedFilterTags} messageTags={selectedMessageTags}/>
+      <div className="col-12 col-lg-8 col-md-6 col-sm-12">
+        <Chat filterTags={selectedFilterTags} messageTags={selectedMessageTags} sendMessage={sendMessage}/>
       </div>
     </div>
   );

@@ -36,13 +36,20 @@ function Tags({ tags, selectedTags, setSelectedTags, inputPlaceholder }) {
         setSelectedTags(selTags);
     }
 
+    function clearTags() {
+        setSelectedTags([])
+    }
+
     return (
-        <div className="hafl-height-container border-end shadow">
+        <div className="hafl-height-container border-end shadow border-top">
             <div className="bg-light border-bottom shadow-sm mb-3"  style={{ minHeight: 51 }}>
                 <div className="container-fluid">
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-start flex-column flex-wrap">
                         <TagInput tags={selectTags()} addTag={addTag} inputPlaceholder={inputPlaceholder}/>
-                        <button className="btn btn-primary m-1" onClick={() => copyTags()} title="Copying all existing tags to area of selected tags">Copy</button>
+                        <div>
+                            <button className="btn btn-primary m-1" onClick={() => copyTags()} title="Copying all existing tags to area of selected tags">Copy</button>
+                            <button className="btn btn-primary m-1" onClick={() => clearTags()}>Clear</button>
+                        </div>
                     </div>
                 </div>
             </div>

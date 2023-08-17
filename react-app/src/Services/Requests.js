@@ -2,9 +2,10 @@ import axios from "axios";
 
 export default class Requests {
 
-    getMessages = async function() {
+    getMessages = async function(tags = null) {
         try {
-            const result = await axios.get(process.env.REACT_APP_API_BASE_URL + "/api/message")
+            const tagsTail = tags ? '?' + tags.join('&tags=').slice(1) : '';
+            const result = await axios.get(process.env.REACT_APP_API_BASE_URL + "/api/message" + tagsTail)
             return result.data;
         } catch (error) {
             console.log(error)

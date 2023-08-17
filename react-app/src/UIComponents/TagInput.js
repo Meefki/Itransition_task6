@@ -15,8 +15,6 @@ function TagInput({ tags, addTag, inputPlaceholder }) {
         addTag(keyText);
     }
 
-    //const [items, setItems] = useState([])
-
     const menuItems = () => {
         let tagItems = [...tags];
         if (searchedText && !tags.find(tag => tag === searchedText)) tagItems.unshift(searchedText)
@@ -27,25 +25,6 @@ function TagInput({ tags, addTag, inputPlaceholder }) {
 
         return menuItems;
     }
-
-    // useEffect(() => {
-    //     getTags('');
-    //     let tagItems = [...tags];
-    //     if (searchedText && !tags.find(tag => tag === searchedText)) tagItems.unshift(searchedText)
-    //     setItems(tagItems.map((tag, index) => { key = index.toString(), label = (
-    //         <span>{tag}</span>
-    //     )}));
-    // }, []);
-
-    // const menu = () => {
-    //     let menuItems = tags.map((mit) => (<Menu.Item key={mit}>{mit}</Menu.Item>));
-    //     if (searchedText && !tags.find(tag => tag === searchedText)) menuItems.unshift(<Menu.Item key={searchedText}>{searchedText}</Menu.Item>) 
-    //     return (
-    //         <Menu onClick={menuItemClick}>
-    //             {menuItems}
-    //         </Menu>
-    //     )
-    // }
 
     return (
         <Dropdown menu={{ items: menuItems() }} trigger={['click']}>
@@ -58,7 +37,6 @@ function TagInput({ tags, addTag, inputPlaceholder }) {
                     setSearchedText(e.target.value);
                     getTags(e.target.value);
                 }}
-                style={{ minWidth: 200 }}  
             />
         </Dropdown>
     );

@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tag } from 'antd';
 
-const Message = ({ message, index }) => {
+function Message({ message, index }) {
+
     const formatDate = (fullDate) => {
         const dateTime = fullDate.split('T');
-
-        dateTime[1] = dateTime[1].split('.')[0]
-
-        return dateTime.join(' ');
+        dateTime[1] = dateTime[1].split('.')[0];
+        return dateTime;
     }
 
     return (
-        <div className="border-bottom m-2">
+        <div className="border-bottom m-2 d-flex justify-content-between">
             <span className="d-flex justify-content-start">
                 <div>
                     {
@@ -20,9 +19,12 @@ const Message = ({ message, index }) => {
                         })
                     }
                 </div>
-                <p>{message.message}</p>
+                <p className="text-wrap">{message.message}</p>
             </span>
-            <p>{formatDate(message.sentDate)}</p>
+            <div>
+                <Tag color="geekblue">{formatDate(message.sentDate)[0]}</Tag>
+                <Tag color="cyan">{formatDate(message.sentDate)[1]}</Tag>
+            </div>
         </div>
     );
 }

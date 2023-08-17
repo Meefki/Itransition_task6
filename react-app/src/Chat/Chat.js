@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Requests from "../Services/Requests";
 import Message from "./Message";
+import Send from '../Resources/send.png'
 
-const Chat = () => {
+const styles = {
+    messageInput: {
+        height: 100
+    },
+    header: {
+        height: 50
+    }
+}
+
+function Chat({filterTags, messageTags, sendMessage}) {
 
     const [messages, setMessages] = useState([]);
 
@@ -16,21 +26,46 @@ const Chat = () => {
         getMessages();
     }, [])
 
+    const [messageStr, setMessageStr] = useState('');
+
+    function send() {
+        const message = {
+            value: messageStr,
+            tags: messageTags
+        };
+        sendMessage(message);
+        setMessageStr('');
+    }
+
     return (
-        <div className="full-height-container">
+        <div className="full-height-container d-flex flex-column border-top">
             <div className="bg-light border-bottom shadow-sm mb-3">
-                <div className="container-fluid" style={{ minHeight: 50 }}>
-                    <div className="d-sm-inline-flex justify-content-between">
-                    <h2>Chat</h2>
-                    </div>
+                <div className="container-fluid" style={styles.header}>
+                    <h2 className="align-self-center">Chat</h2>
                 </div>
             </div>
-            <div>
+            <div className="flex-grow-1 overflow-x-hidden overflow-y-auto">
                 {
-                    messages.sort((m1, m2) => m1.sentDate < m2.sentDate ? -1 : m1.sentDate > m2.sentDate ? 1 : 0).map((message, key) => {
+                    messages.sort((m1, m2) => m1.sentDate - m2.sentDate).map((message, key) => {
                         return (<Message key={key} message={message} index={key}/>)
                     })
                 }
+            </div>
+            <div className="d-flex flex-column-reverse bg-light border-top shadow-sm mt-3" style={styles.messageInput}>
+                <div className="d-flex align-items-center justify-content-center h-100">
+                    <div className="d-flex w-100">
+                        <input
+                            value={messageStr}
+                            placeholder="Type message"
+                            className="input-group-text w-100 m-2"
+                            onChange={(e) => setMessageStr(e.target.value)}/>
+                        <button
+                            type="submit"
+                            className="btn btn-primary m-2 d-flex align-items-center justify-content-center">
+                                <p className="m-0" onClick={() => send()}>Send</p>&nbsp;<img src={Send}/>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     )
