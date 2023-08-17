@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Requests from "../Services/Requests";
 import Message from "./Message";
 import Send from '../Resources/send.png'
 
@@ -12,26 +11,15 @@ const styles = {
     }
 }
 
-function Chat({filterTags, messageTags, sendMessage}) {
-
-    const [messages, setMessages] = useState([]);
-
-    const getMessages = async () => {
-        const requests = new Requests();
-        const msgs = await requests.getMessages();
-        setMessages(msgs ?? []);
-    }
-
-    useEffect(() => {
-        getMessages();
-    }, [])
+function Chat({messageTags, sendMessage, messages}) {
 
     const [messageStr, setMessageStr] = useState('');
 
     function send() {
         const message = {
-            value: messageStr,
-            tags: messageTags
+            message: messageStr,
+            tags: messageTags,
+            sentDate: null
         };
         sendMessage(message);
         setMessageStr('');
@@ -46,7 +34,7 @@ function Chat({filterTags, messageTags, sendMessage}) {
             </div>
             <div className="flex-grow-1 overflow-x-hidden overflow-y-auto">
                 {
-                    messages.sort((m1, m2) => m1.sentDate - m2.sentDate).map((message, key) => {
+                    messages.sort((m1, m2) => m1.sentDate > m2.sentDate ? 1 : m1.sentDate < m2.sentDate ? -1 : 0).map((message, key) => {
                         return (<Message key={key} message={message} index={key}/>)
                     })
                 }

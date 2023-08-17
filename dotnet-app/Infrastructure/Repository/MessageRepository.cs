@@ -40,7 +40,7 @@ public class MessageRepository : IMessageRepository
     {
         Expression<Func<MessageDTO, bool>> predicate = null!;
         if (tags.Any())
-            predicate = x => x.MessageTags.Any(t => tags.Contains(t.Tag.Name));
+            predicate = x => x.MessageTags.Any(t => tags.Contains(t.Tag.Name)) || x.MessageTags.Count == 0;
         else
             predicate = x => true;
 

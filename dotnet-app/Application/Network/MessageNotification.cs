@@ -9,6 +9,7 @@ public class MessageNotification
         Tags = new List<string>();
     }
 
-    public string Value { get; init; } = null!;
+    public string Message { get; init; } = null!;
     public IReadOnlyCollection<string> Tags { get; init; } = null!;
+    public DateTime? SentDate { get; set; } = DateTime.UtcNow;
 }

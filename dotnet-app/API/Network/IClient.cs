@@ -6,5 +6,5 @@ namespace API.Network;
 public interface IClient
 {
     Task NewMessage(MessageNotification message);
-    Task NewTags(IEnumerable<string> tags);
+    Task NewTags();
 }

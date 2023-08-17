@@ -7,6 +7,30 @@ import TagsContext from "./Contexts/FilterTagsContext";
 import Requests from "./Services/Requests";
 
 function App() {
+  // Messages
+  const [messages, setMessages] = useState([]);
+
+  const getMessages = async (tags = null) => {
+    const requests = new Requests();
+    const msgs = await requests.getMessages(tags);
+    msgs.sort((m1, m2) => m1.sentDate > m2.sentDate ? 1 : m1.sentDate < m2.sentDate ? -1 : 0);
+    setMessages(msgs ?? []);
+  }
+
+  useEffect(() => {
+      getMessages();
+  }, [])
+
+  const [newMessage, setNewMessage] = useState();
+
+  useEffect(() => {
+    if (newMessage){
+      let msgs = [...messages, newMessage];
+      msgs.sort((m1, m2) =>  m1.sentDate > m2.sentDate ? 1 : m1.sentDate < m2.sentDate ? -1 : 0);
+      setMessages(msgs);
+    }
+  }, [newMessage])
+
   // Tags
   //// Searched tags
   const [tags, setTags] = useState([]);
@@ -23,6 +47,11 @@ function App() {
 
   //// Filter tags for chat
   const [selectedFilterTags, setSelectedFilterTags] = useState([]);
+
+  const updateFilter = (tags) => {
+    setSelectedFilterTags(tags)
+    getMessages(tags);
+  }
 
   //// Message tags for chat
   const [selectedMessageTags, setSelectedMessageTags] = useState([]);
@@ -42,12 +71,17 @@ function App() {
 
   useEffect(() => {
     if (connection) {
-        connection
-            .start()
-            .then(() => {
-                connection.on("NewMessage", (message) => console.log(message));
-                connection.on("NewTags", (tags) => console.log(tags));
-            }).catch((error) => console.log(error))
+      if (connection.state && connection.state !== "Disconnected")
+        connection.stop();
+
+      connection
+          .start()
+          .then(() => {
+              connection.on("NewMessage", (message) => {
+                setNewMessage(message);
+              });
+              connection.on("NewTags", () => getTags(''));
+          }).catch((error) => console.log(error))
     }
   }, [connection])
 
@@ -59,12 +93,12 @@ function App() {
     <div className="d-flex flex-column flex-md-row flex-lg-row flex-xl-row">
       <div className="full-height-container col-12 col-lg-4 col-md-6 col-sm-12 d-flex flex-column">
       <TagsContext.Provider value={{ getTags }}>
-        <Tags tags={tags} selectedTags={selectedFilterTags} setSelectedTags={setSelectedFilterTags} inputPlaceholder="Filter tags"/>
+        <Tags tags={tags} selectedTags={selectedFilterTags} setSelectedTags={updateFilter} inputPlaceholder="Filter tags"/>
         <Tags tags={tags} selectedTags={selectedMessageTags} setSelectedTags={setSelectedMessageTags} inputPlaceholder="Message tags"/>
       </TagsContext.Provider>
       </div>
       <div className="col-12 col-lg-8 col-md-6 col-sm-12">
-        <Chat filterTags={selectedFilterTags} messageTags={selectedMessageTags} sendMessage={sendMessage}/>
+        <Chat messageTags={selectedMessageTags} sendMessage={sendMessage} messages={messages} />
       </div>
     </div>
   );
