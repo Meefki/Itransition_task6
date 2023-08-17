@@ -27,8 +27,8 @@ function App() {
   useEffect(() => {
     if (newMessage){
       let msgs = [...messages];
-      if (!selectedFilterTags || selectedFilterTags.lenght == 0 || selectedFilterTags.some(el => {
-        return !newMessage.tags || newMessage.tags.lenght == 0 || newMessage.tags.indexOf(el) !== -1;
+      if (!selectedFilterTags || selectedFilterTags.length == 0 || selectedFilterTags.some(el => {
+        return !newMessage.tags || newMessage.tags.length == 0 || newMessage.tags.indexOf(el) !== -1;
       })) {
         msgs.push(newMessage);
         msgs.sort((m1, m2) =>  m1.sentDate > m2.sentDate ? 1 : m1.sentDate < m2.sentDate ? -1 : 0);
