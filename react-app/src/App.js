@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     if (newMessage){
       let msgs = [...messages];
-      if (!selectedFilterTags || selectedFilterTags.some(el => {
+      if (!selectedFilterTags || selectedFilterTags.lenght == 0 || selectedFilterTags.some(el => {
         return !newMessage.tags || newMessage.tags.lenght == 0 || newMessage.tags.indexOf(el) !== -1;
       })) {
         msgs.push(newMessage);
