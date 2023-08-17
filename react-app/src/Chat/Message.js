@@ -21,9 +21,9 @@ function Message({ message, index }) {
                 </div>
                 <p className="text-wrap">{message.message}</p>
             </span>
-            <div>
-                <Tag color="geekblue">{formatDate(message.sentDate)[0]}</Tag>
-                <Tag color="cyan">{formatDate(message.sentDate)[1]}</Tag>
+            <div className="d-flex justify-content-center justify-content-lg-end justify-content-xl-end align-items-center flex-column flex-lg-row flex-xl-row">
+                <Tag className="m-1" color="geekblue">{formatDate(message.sentDate)[0]}</Tag>
+                <Tag className="m-1" color="cyan">{formatDate(message.sentDate)[1]}</Tag>
             </div>
         </div>
     );
