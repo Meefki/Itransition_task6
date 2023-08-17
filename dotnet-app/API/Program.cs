@@ -1,5 +1,6 @@
 using API.Network;
 using Infrastructure.EntityConfigurations;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -24,16 +25,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+string[] origins = config.GetSection("Cors:AllowedHosts").Get<string[]>() ?? Array.Empty<string>();
+CorsPolicy policy = new();
+policy.Methods.Add("*");
+policy.Headers.Add("*");
+policy.SupportsCredentials = true;
+foreach (string origin in origins)
+{
+    policy.Origins.Add(origin);
+}
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "Default",
-        b =>
-        {
-            b.WithOrigins(config.GetValue<string>("Cors:AllowedHosts") ?? string.Empty);
-            b.AllowAnyMethod();
-            b.AllowAnyHeader();
-            b.AllowCredentials();
-        });
+    options.AddPolicy(name: "Default", policy);
 });
 
 builder.Services.AddSignalR();
