@@ -5,6 +5,7 @@ import Tags from "./Chat/Tags";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import TagsContext from "./Contexts/FilterTagsContext";
 import Requests from "./Services/Requests";
+import FilterTagsContext from "./Contexts/FilterTagsContext";
 
 function App() {
   // Messages
@@ -27,6 +28,9 @@ function App() {
     if (newMessage){
       let msgs = [...messages, newMessage];
       msgs.sort((m1, m2) =>  m1.sentDate > m2.sentDate ? 1 : m1.sentDate < m2.sentDate ? -1 : 0);
+      if (selectedFilterTags && selectedFilterTags.some(el => {
+        return !messages.tags || messages.tags.lenght == 0 || messages.tags.ifndexOf(el) !== -1;
+      }))
       setMessages(msgs);
     }
   }, [newMessage])
